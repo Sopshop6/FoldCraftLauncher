@@ -48,16 +48,18 @@ jobs:
 
       - name: Patch fclversion for universal
         run: |
-          python3 - <<'PY'
-          import glob, json
-          files = glob.glob('FCL/src/main/assets/modpackExternal/.minecraft/versions/*/fclversion.cfg')
-          for f in files:
-              data = json.load(open(f, encoding='utf-8'))
-              data['graphicsBackend'] = ''
-              data['driver'] = ''
-              json.dump(data, open(f, 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-              print('patched', f, data.get('renderer'))
+          for f in FCL/src/main/assets/modpackExternal/.minecraft/versions/*/fclversion.cfg; do
+            [ -f "" ] || continue
+            python3 - "" <<'PY'
+          import json, sys
+          f = sys.argv[1]
+          data = json.load(open(f, encoding='utf-8-sig'))
+          data['graphicsBackend'] = ''
+          data['driver'] = ''
+          open(f, 'w', encoding='utf-8', newline='\n').write(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          print('patched', f)
           PY
+          done
 
       - name: Build arm64 APK
         run: |
@@ -73,3 +75,4 @@ jobs:
           name: mengzhongzhiwu-arm64-universal
           path: FCL/build/outputs/apk/**/*.apk
           retention-days: 7
+# rebuild 004922
