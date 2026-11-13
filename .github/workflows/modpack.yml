@@ -81,3 +81,4 @@ jobs:
           gh release upload apk-snap "$APK" --clobber -R "$GITHUB_REPOSITORY"
 # v6 rebuild 014416
 # cfg fix 022037
+# cfg rev 022050

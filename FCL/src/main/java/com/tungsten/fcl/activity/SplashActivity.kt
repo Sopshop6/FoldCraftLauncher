@@ -140,7 +140,8 @@ class SplashActivity : FCLActivity() {
     private fun resetMenuSettingOnUpgrade() {
         try {
             val prefs = getSharedPreferences(launcher, MODE_PRIVATE)
-            val current = packageManager.getPackageInfo(packageName, 0).versionCode
+            // versionCode 固定为 1345，改用自增的配置修订号控制何时重置
+            val current = 2
             if (prefs.getInt(menu_setting_version, -1) != current) {
                 java.io.File(FCLPath.FILES_DIR + /menu_setting.json).delete()
                 prefs.edit().putInt(menu_setting_version, current).apply()
