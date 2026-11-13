@@ -139,12 +139,12 @@ class SplashActivity : FCLActivity() {
     /** 覆盖安装后重置游戏内菜单设置，让新的默认值（90% 分辨率等）生效 */
     private fun resetMenuSettingOnUpgrade() {
         try {
-            val prefs = getSharedPreferences(launcher, MODE_PRIVATE)
+            val prefs = getSharedPreferences("launcher", MODE_PRIVATE)
             // versionCode 固定为 1345，改用自增的配置修订号控制何时重置
             val current = 2
-            if (prefs.getInt(menu_setting_version, -1) != current) {
-                java.io.File(FCLPath.FILES_DIR + /menu_setting.json).delete()
-                prefs.edit().putInt(menu_setting_version, current).apply()
+            if (prefs.getInt("menu_setting_version", -1) != current) {
+                java.io.File(FCLPath.FILES_DIR, "menu_setting.json").delete()
+                prefs.edit().putInt("menu_setting_version", current).apply()
             }
         } catch (_: Throwable) {
         }
