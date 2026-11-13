@@ -563,13 +563,9 @@ class LauncherHelper(
 
     private fun checkTouchMod(bridge: FCLBridge, setting: VersionSetting) {
         try {
-            if (setting.isTouchMod) {
-                LOG.log(Level.INFO, "CheckTouchMod(): Touch mod enabled.")
-                bridge.setHasTouchController(true)
-            } else {
-                LOG.log(Level.INFO, "CheckTouchMod(): Touch mod disabled.")
-                bridge.setHasTouchController(false)
-            }
+            // 直装包：强制开启触控模组代理，不依赖版本设置里的开关
+            LOG.log(Level.INFO, "CheckTouchMod(): Touch mod forced enabled.")
+            bridge.setHasTouchController(true)
         } catch (e: Exception) {
             LOG.log(Level.WARNING, "CheckTouchMod(): failed", e)
         }
