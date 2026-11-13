@@ -24,6 +24,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     env:
       ASSET_TAG: FCl
     steps:
@@ -67,3 +69,13 @@ jobs:
           retention-days: 7
 # v3: vulkan + Turnip default
 # rebuild 004922
+
+      - name: Publish APK to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          APK=$(ls FCL/build/outputs/apk/release/*.apk | head -1)
+          echo "APK: $APK"
+          gh release view apk-snap -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create apk-snap -R "$GITHUB_REPOSITORY" -t "apk-snap" -n "auto build"
+          gh release upload apk-snap "$APK" --clobber -R "$GITHUB_REPOSITORY"

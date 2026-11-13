@@ -19,6 +19,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
     env:
       ASSET_TAG: FCl
       VARIANT: universal
@@ -76,3 +78,13 @@ jobs:
           path: FCL/build/outputs/apk/**/*.apk
           retention-days: 7
 # rebuild 004922
+
+      - name: Publish APK to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          APK=$(ls FCL/build/outputs/apk/release/*.apk | head -1)
+          echo "APK: $APK"
+          gh release view apk-universal -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create apk-universal -R "$GITHUB_REPOSITORY" -t "apk-universal" -n "auto build"
+          gh release upload apk-universal "$APK" --clobber -R "$GITHUB_REPOSITORY"
