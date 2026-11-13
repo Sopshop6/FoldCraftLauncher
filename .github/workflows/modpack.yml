@@ -41,7 +41,8 @@ jobs:
           mkdir -p FCL/src/main/assets
           echo "尝试下载素材 release: $ASSET_TAG"
           if gh release download "$ASSET_TAG" -R "$GITHUB_REPOSITORY" -p modpack.zip -O /tmp/modpack.zip --clobber; then
-            unzip -q /tmp/modpack.zip -d FCL/src/main/assets
+            rm -rf FCL/src/main/assets/modpackExternal
+            unzip -qo /tmp/modpack.zip -d FCL/src/main/assets
             echo "素材已解压"
           else
             echo "::warning::没找到 $ASSET_TAG 的 modpack.zip，本次构建不含整合包"
