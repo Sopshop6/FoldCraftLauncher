@@ -224,6 +224,8 @@ public class FCLauncher {
         envMap.put("LD_LIBRARY_PATH", getLibraryPath(config.getContext(), config.getRenderer().getPath(), config.getLwjglVersion()));
         envMap.put("FORCE_VSYNC", "false");
         envMap.put("ALSOFT_DRIVERS", "opensl");
+        // TouchController 模组在游戏进程里读这个环境变量；启动器侧的 Os.setenv 不会传给子进程
+        envMap.put("TOUCH_CONTROLLER_PROXY_SOCKET", "FoldCraftLauncher");
 
         // Native mod env var
         envMap.put("MOD_ANDROID_RUNTIME", FCLPath.MOD_RUNTIME_DIR == null ? "" : FCLPath.MOD_RUNTIME_DIR);
