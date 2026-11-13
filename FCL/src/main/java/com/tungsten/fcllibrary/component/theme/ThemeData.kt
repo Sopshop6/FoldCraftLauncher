@@ -1,4 +1,4 @@
-package com.tungsten.fcllibrary.component.theme
+﻿package com.tungsten.fcllibrary.component.theme
 
 import android.content.Context
 import android.graphics.Color
@@ -111,7 +111,7 @@ data class ThemeData(
             val migrated = pref == ThemePreference() &&
                     context.getSharedPreferences("theme", Context.MODE_PRIVATE)
                         .contains("theme_color")
-            val effective = if (migrated) migrateFromSharedPreferences(context) else pref
+            val effective = (if (migrated) migrateFromSharedPreferences(context) else pref).copy(fullscreen = true)
             val lt = ImageUtil.load(FCLPath.LT_BACKGROUND_PATH)
                 .orElse(ConvertUtils.getBitmapFromAssets(context, "img/background/lt.png"))
             val dk = ImageUtil.load(FCLPath.DK_BACKGROUND_PATH)
