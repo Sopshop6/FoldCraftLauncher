@@ -1,4 +1,4 @@
-name: Modpack Build
+﻿name: Modpack Build
 
 on:
   workflow_dispatch:
@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     env:
-      ASSET_TAG: modpack-v1
+      ASSET_TAG: FCl
     steps:
       - name: Checkout
         uses: actions/checkout@v4
