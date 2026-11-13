@@ -1,4 +1,4 @@
-package com.tungsten.fcl.setting
+﻿package com.tungsten.fcl.setting
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -228,7 +228,7 @@ class MenuSetting {
             changed()
         }
 
-    var windowScale: Double = 1.0
+    var windowScale: Double = 0.9
         set(value) {
             if (field == value) return
             field = value
@@ -491,7 +491,7 @@ class MenuSetting {
                 ms.isPhysicalMouseMode = json["physicalMouseMode"]?.asBoolean ?: false
                 ms.itemBarWidth = json["itemBarWidth"]?.asInt ?: 0
                 ms.itemBarHeight = json["itemBarHeight"]?.asInt ?: 0
-                ms.windowScale = json["windowScale"]?.asDouble ?: 1.0
+                ms.windowScale = json["windowScale"]?.asDouble ?: 0.9
                 ms.cursorOffset = json["cursorOffset"]?.asDouble ?: 0.0
                 ms.isForceResolution = json["forceResolution"]?.asBoolean ?: false
                 ms.forceResolutionWidth = json["forceResolutionWidth"]?.asInt ?: 1920

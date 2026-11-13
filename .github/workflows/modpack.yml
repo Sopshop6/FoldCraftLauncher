@@ -19,6 +19,7 @@ on:
       - 'FCL/src/main/java/com/mio/data/Renderer.kt'
       - 'FCL/src/main/java/com/tungsten/fclauncher/FCLauncher.java'
       - 'FCL/src/main/assets/local.properties'
+      - 'FCL/src/main/java/com/tungsten/fcl/setting/MenuSetting.kt'
 
 jobs:
   build:
