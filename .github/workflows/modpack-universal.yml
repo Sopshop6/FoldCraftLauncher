@@ -1,2 +1,94 @@
+name: Modpack Build (Universal)
 
-# cfg fix2 022117
+on:
+  workflow_dispatch:
+    inputs:
+      pkgName:
+        description: '包名'
+        required: true
+        default: 'com.sopshop.mengzhongzhiwu'
+      appName:
+        description: '应用名'
+        required: true
+        default: '梦中之雾（通用）'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/modpack-universal.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    env:
+      ASSET_TAG: FCl
+      VARIANT: universal
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Fetch modpack assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p FCL/src/main/assets
+          if gh release download "$ASSET_TAG" -R "$GITHUB_REPOSITORY" -p modpack.zip -O /tmp/modpack.zip --clobber; then
+            rm -rf FCL/src/main/assets/modpackExternal
+            unzip -qo /tmp/modpack.zip -d FCL/src/main/assets
+            echo "素材已解压"
+          else
+            echo "::error::没找到 $ASSET_TAG 的 modpack.zip"
+            exit 1
+          fi
+
+      - name: Patch fclversion for universal
+        run: |
+          for f in FCL/src/main/assets/modpackExternal/.minecraft/versions/*/fclversion.cfg; do
+            [ -f "" ] || continue
+            python3 - "" <<'PY'
+          import json, sys
+          f = sys.argv[1]
+          data = json.load(open(f, encoding='utf-8-sig'))
+          data['graphicsBackend'] = ''
+          data['driver'] = ''
+          open(f, 'w', encoding='utf-8', newline='\n').write(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
+          print('patched', f)
+          PY
+          done
+
+      - name: Build arm64 APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease \
+            "-Darch=arm64" \
+            "-DpkgName=${{ github.event.inputs.pkgName || 'com.sopshop.mengzhongzhiwu' }}" \
+            "-DappName=${{ github.event.inputs.appName || '梦中之雾（通用）' }}"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: mengzhongzhiwu-arm64-universal
+          path: FCL/build/outputs/apk/**/*.apk
+          retention-days: 7
+# rebuild 004922
+
+      - name: Publish APK to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          APK=$(ls FCL/build/outputs/apk/release/*.apk | head -1)
+          echo "APK: $APK"
+          gh release view apk-universal -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create apk-universal -R "$GITHUB_REPOSITORY" -t "apk-universal" -n "auto build"
+          gh release upload apk-universal "$APK" --clobber -R "$GITHUB_REPOSITORY"
+# v6 rebuild 014416
+# cfg fix 022037
+# cfg rev 022050
+# rebuild 022136
