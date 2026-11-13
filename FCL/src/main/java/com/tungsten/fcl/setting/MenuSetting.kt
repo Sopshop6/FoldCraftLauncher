@@ -129,7 +129,7 @@ class MenuSetting {
             changed()
         }
 
-    var isDisableGesture: Boolean = false
+    var isDisableGesture: Boolean = true
         set(value) {
             if (field == value) return
             field = value
@@ -278,7 +278,7 @@ class MenuSetting {
             changed()
         }
 
-    var mouseSize: Int = 15
+    var mouseSize: Int = 5
         set(value) {
             if (field == value) return
             field = value
@@ -464,7 +464,7 @@ class MenuSetting {
                 ms.isRequestMaxRefreshRate = json["requestMaxRefreshRate"]?.asBoolean ?: true
                 ms.menuPositionX = json["menuPositionX"]?.asDouble ?: 0.5
                 ms.menuPositionY = json["menuPositionY"]?.asDouble ?: 0.5
-                ms.isDisableGesture = json["disableGesture"]?.asBoolean ?: false
+                ms.isDisableGesture = json["disableGesture"]?.asBoolean ?: true
                 ms.gestureMode = GestureMode.getById(json["gestureMode"]?.asInt ?: 0)
                 ms.isDisableLeftTouch = json["disableLeftTouch"]?.asBoolean ?: false
                 ms.isEnableGyroscope = json["enableGyroscope"]?.asBoolean ?: false
@@ -485,7 +485,7 @@ class MenuSetting {
                 ms.mouseMoveMode = MouseMoveMode.getById(json["mouseMoveMode"]?.asInt ?: 0)
                 ms.mouseSensitivity = json["mouseSensitivity"]?.asDouble ?: 1.0
                 ms.mouseSensitivityCursor = json["mouseSensitivityCursor"]?.asDouble ?: 2.0
-                ms.mouseSize = json["mouseSize"]?.asInt ?: 15
+                ms.mouseSize = json["mouseSize"]?.asInt ?: 5
                 ms.mouseOffsetX = json["mouseOffsetX"]?.asInt ?: 0
                 ms.mouseOffsetY = json["mouseOffsetY"]?.asInt ?: 0
                 ms.isPhysicalMouseMode = json["physicalMouseMode"]?.asBoolean ?: false
