@@ -299,8 +299,10 @@ class LauncherHelper(
             scaleFactor = menuSetting.windowScale
             cursorOffset = menuSetting.cursorOffset
         } else {
-            scaleFactor = 1.0
-            cursorOffset = 0.0
+            // 没有 menu_setting.json 时用 MenuSetting 的默认值（windowScale = 0.9）
+            val defaults = MenuSetting()
+            scaleFactor = defaults.windowScale
+            cursorOffset = defaults.cursorOffset
         }
         // 强制分辨率已迁移到游戏内菜单（MenuSetting），启动前同步进静态配置
         FCLBridge.initForceResolution(menuSetting)

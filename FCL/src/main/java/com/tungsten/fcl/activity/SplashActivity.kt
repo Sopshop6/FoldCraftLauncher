@@ -128,10 +128,24 @@ class SplashActivity : FCLActivity() {
         lifecycleScope.launch {
             async(Dispatchers.IO) {
                 FCLPath.loadPaths(this@SplashActivity)
+                resetMenuSettingOnUpgrade()
                 Logging.start(Paths.get(FCLPath.LOG_DIR))
                 initState()
             }.await()
             start()
+        }
+    }
+
+    /** 覆盖安装后重置游戏内菜单设置，让新的默认值（90% 分辨率等）生效 */
+    private fun resetMenuSettingOnUpgrade() {
+        try {
+            val prefs = getSharedPreferences(launcher, MODE_PRIVATE)
+            val current = packageManager.getPackageInfo(packageName, 0).versionCode
+            if (prefs.getInt(menu_setting_version, -1) != current) {
+                java.io.File(FCLPath.FILES_DIR + /menu_setting.json).delete()
+                prefs.edit().putInt(menu_setting_version, current).apply()
+            }
+        } catch (_: Throwable) {
         }
     }
 
