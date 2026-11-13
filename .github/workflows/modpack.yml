@@ -1,0 +1,64 @@
+name: Modpack Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      pkgName:
+        description: '包名'
+        required: true
+        default: 'com.sopshop.mengzhongzhiwu'
+      appName:
+        description: '应用名'
+        required: true
+        default: '梦中之雾'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/modpack.yml'
+      - 'FCL/src/main/java/com/mio/manager/RendererManager.kt'
+      - 'FCL/src/main/java/com/mio/data/Renderer.kt'
+      - 'FCL/src/main/java/com/tungsten/fclauncher/FCLauncher.java'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    env:
+      ASSET_TAG: modpack-v1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Fetch modpack assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p FCL/src/main/assets
+          echo "尝试下载素材 release: $ASSET_TAG"
+          if gh release download "$ASSET_TAG" -R "$GITHUB_REPOSITORY" -p modpack.zip -O /tmp/modpack.zip --clobber; then
+            unzip -q /tmp/modpack.zip -d FCL/src/main/assets
+            echo "素材已解压"
+          else
+            echo "::warning::没找到 $ASSET_TAG 的 modpack.zip，本次构建不含整合包"
+          fi
+          ls -la FCL/src/main/assets | head -20
+
+      - name: Build arm64 APK
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease \
+            "-Darch=arm64" \
+            "-DpkgName=${{ github.event.inputs.pkgName || 'com.sopshop.mengzhongzhiwu' }}" \
+            "-DappName=${{ github.event.inputs.appName || '梦中之雾' }}"
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: mengzhongzhiwu-arm64
+          path: FCL/build/outputs/apk/**/*.apk
+          retention-days: 7

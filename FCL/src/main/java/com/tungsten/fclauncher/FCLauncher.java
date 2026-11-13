@@ -444,6 +444,14 @@ public class FCLauncher {
                 if (RendererPlugin.toggleEnabled(mgPrefs, "MG_COUNT_LAUNCH", true)) {
                     envMap.put("MG_COUNT_LAUNCH", "1");
                 }
+            } else if (renderer.isEqual(Renderer.ID_MOBILEGL)) {
+                // 内置 MobileGL（MGL）：元数据取自 MGL 插件 APK 的 manifest
+                // DLIBGL_ES=3 / POJAV_RENDERER=opengles3 / MOBILEGL_BACKEND_TYPE=DirectGLES
+                envMap.put("POJAV_RENDERER", "opengles3");
+                envMap.put("LIBGL_ES", "3");
+                envMap.put("DLIBGL_ES", "3");
+                envMap.put("MOBILEGL_BACKEND_TYPE", "DirectGLES");
+                envMap.put("POJAVEXEC_EGL", "libMobileGL.so");
             }
         }
     }

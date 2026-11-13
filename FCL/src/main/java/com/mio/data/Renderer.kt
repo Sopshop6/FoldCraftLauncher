@@ -26,6 +26,8 @@ data class Renderer(
         const val ID_FREEDRENO = "8d427e6c-9d22-2d19-db0c-3b9ac2c1543f"
         const val ID_NGGL4ES = "e7b90ed6-e518-4d4e-93dc-5c7133cd5b31"
         const val ID_MOBILEGLUES = "acaf8100-bbaf-4d68-b30d-38bf42fcd640"
+        // 内置 MobileGL（MGL）：直装包默认渲染器
+        const val ID_MOBILEGL = "5f3c2a91-8d47-4e6b-9a12-7c4e5b8d0f31"
         const val ID_SFPEW = "f3e4280b-db2e-42e2-95eb-671640b7b0eb"
     }
 

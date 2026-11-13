@@ -13,6 +13,7 @@ object RendererManager {
     lateinit var RENDERER_ZINK: Renderer
     lateinit var RENDERER_NGGL4ES: Renderer
     lateinit var RENDERER_MOBILEGLUES: Renderer
+    lateinit var RENDERER_MOBILEGL: Renderer
     private var isInit = false
 
     @JvmStatic
@@ -97,18 +98,28 @@ object RendererManager {
             ""
         )
 
+        RENDERER_MOBILEGL = Renderer(
+            "MobileGL",
+            "内置 MobileGL 渲染器（DirectGLES）",
+            "libMobileGL.so",
+            "libMobileGL.so",
+            "",
+            listOf("DLIBGL_ES=3"),
+            listOf("POJAV_RENDERER=opengles3", "MOBILEGL_BACKEND_TYPE=DirectGLES"),
+            Renderer.ID_MOBILEGL,
+            "",
+            ""
+        )
+
         RendererPlugin.init(context)
         addRenderer()
         DriverPlugin.init(context)
     }
 
     private fun addRenderer() {
-        rendererList.add(RENDERER_NGGL4ES)
-        rendererList.add(RENDERER_GL4ES)
-        rendererList.add(RENDERER_VGPU)
-        rendererList.add(RENDERER_ZINK)
-        rendererList.add(RENDERER_MOBILEGLUES)
-        rendererList.addAll(RendererPlugin.rendererList)
+        // 直装包只暴露一个渲染器：内置 MobileGL（MGL）
+        // 其他内置渲染器保留代码但不进列表，避免用户在手机上选错
+        rendererList.add(RENDERER_MOBILEGL)
     }
 
     fun refresh(context: Context) {

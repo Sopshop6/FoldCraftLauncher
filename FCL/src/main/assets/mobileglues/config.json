@@ -1,0 +1,13 @@
+{
+  "enableANGLE": 0,
+  "enableNoError": 0,
+  "enableExtGL43": 0,
+  "enableExtTimerQuery": 0,
+  "enableExtComputeShader": 0,
+  "enableExtDirectStateAccess": 0,
+  "maxGlslCacheSize": 128,
+  "multidrawMode": 0,
+  "angleDepthClearFixMode": 0,
+  "customGLVersion": 0,
+  "fsr1Setting": 0
+}
