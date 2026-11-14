@@ -1,0 +1,50 @@
+name: QuickMove Mod Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'quickmove-mod/**'
+      - '.github/workflows/quickmove-mod.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Build mod
+        working-directory: quickmove-mod
+        run: gradle build --no-daemon --stacktrace
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickmove-jar
+          path: quickmove-mod/build/libs/*.jar
+          retention-days: 14
+
+      - name: Publish jar to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          JAR=$(ls quickmove-mod/build/libs/*.jar | head -1)
+          echo "JAR: $JAR"
+          gh release view quickmove -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create quickmove -R "$GITHUB_REPOSITORY" -t "quickmove" -n "QuickMove mod builds"
+          gh release upload quickmove "$JAR" --clobber -R "$GITHUB_REPOSITORY"

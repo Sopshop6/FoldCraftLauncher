@@ -1,0 +1,1 @@
+{"required":true,"minVersion":"0.8.5","package":"com.sopshop.quickmove.mixin","compatibilityLevel":"JAVA_17","refmap":"quickmove.refmap.json","client":["ACSAccessor"]}

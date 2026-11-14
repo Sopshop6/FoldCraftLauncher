@@ -1,0 +1,23 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="MIT"
+[[mods]]
+modId="quickmove"
+version="1.0.0"
+displayName="QuickMove"
+description='''
+双击物品等于 shift 点击（整堆快速转移，容器/背包双向）。
+选中物品时在物品栏上方显示物品名，停留 2 秒。
+'''
+[[dependencies.quickmove]]
+    modId="forge"
+    mandatory=true
+    versionRange="[47,)"
+    ordering="NONE"
+    side="CLIENT"
+[[dependencies.quickmove]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,1.20.2)"
+    ordering="NONE"
+    side="CLIENT"
