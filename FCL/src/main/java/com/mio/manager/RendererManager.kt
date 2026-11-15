@@ -117,9 +117,9 @@ object RendererManager {
     }
 
     private fun addRenderer() {
-        // 直装包只暴露一个渲染器：内置 MobileGL（MGL）
-        // 其他内置渲染器保留代码但不进列表，避免用户在手机上选错
+        // 内置 MGL 作为默认项，同时恢复用户安装的渲染器插件（MGL/MG/Zink 等插件包）
         rendererList.add(RENDERER_MOBILEGL)
+        rendererList.addAll(RendererPlugin.rendererList)
     }
 
     fun refresh(context: Context) {
