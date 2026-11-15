@@ -105,7 +105,7 @@ object RendererManager {
             "libMobileGL.so",
             "",
             listOf("DLIBGL_ES=3"),
-            listOf("POJAV_RENDERER=opengles3", "MOBILEGL_BACKEND_TYPE=DirectGLES"),
+            listOf("POJAV_RENDERER=opengles3", "MOBILEGL_BACKEND_TYPE=Vulkan"),
             Renderer.ID_MOBILEGL,
             "",
             ""
